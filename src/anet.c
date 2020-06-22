@@ -224,8 +224,8 @@ int anetGenericResolve(char *err, char *host, char *ipbuf, size_t ipbuf_len,
     if (flags & ANET_IP_ONLY) hints.ai_flags = AI_NUMERICHOST;
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;  /* specify socktype to avoid dups */
-
-    if ((rv = getaddrinfo(host, NULL, &hints, &info)) != 0) {
+    rv = getaddrinfo(host, NULL, &hints, &info);
+    if (rv != 0) {
         anetSetError(err, "%s", gai_strerror(rv));
         return ANET_ERR;
     }
@@ -237,7 +237,7 @@ int anetGenericResolve(char *err, char *host, char *ipbuf, size_t ipbuf_len,
         inet_ntop(AF_INET6, &(sa->sin6_addr), ipbuf, ipbuf_len);
     }
 
-    freeaddrinfo(info);
+    // freeaddrinfo(info);
     return ANET_OK;
 }
 
